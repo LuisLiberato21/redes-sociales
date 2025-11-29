@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Predicción de Emociones</title>
+  <link rel="stylesheet" href="static/css/estilos.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f2f5;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .container {
+      max-width: 900px;
+      width: 100%;
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      margin-bottom: 30px;
+    }
+
+    h2, h3 {
+      text-align: center;
+      color: #4CAF50;
+      margin-bottom: 15px;
+    }
+
+    p {
+      line-height: 1.6;
+      margin-bottom: 10px;
+    }
+
+    ul {
+      margin: 10px 0 15px 20px;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+      border-radius: 10px;
+      margin: 15px auto;
+      transition: transform 0.3s;
+    }
+
+    img:hover {
+      transform: scale(1.05);
+    }
+
+    /* Botón estilo Predecir */
+    .btn-prediccion {
+      width: 50%;
+      padding: 15px;
+      margin: 20px auto 0 auto;
+      background-color: #4CAF50;
+      color: white;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      text-align: center;
+      display: block;
+      transition: 0.3s;
+    }
+
+    .btn-prediccion:hover {
+      background-color: #45a049;
+    }
+
+    /* Bloque informativo */
+    .info-section {
+      margin-bottom: 30px;
+    }
+
+    .info-section h3 {
+      color: #4CAF50;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="info-section">
+    <h2>Las redes sociales, omnipresentes en la vida cotidiana</h2>
+    <img src="static/images/social_m.png" alt="Usuarios Redes Sociales">
+    <p>Estas son las cifras estimadas de usuarios activos (2025) para cada plataforma de redes sociales:</p>
+    <ul>
+      <li>WhatsApp: cerca de 3,000 millones de usuarios activos mensuales.</li>
+      <li>Facebook: aproximadamente 2,000-3,000 millones de usuarios activos diarios.</li>
+      <li>Instagram: alrededor de 2,000-3,000 millones de usuarios activos mensuales.</li>
+      <li>LinkedIn: más de 900 millones de usuarios en total, con 700 millones activos.</li>
+      <li>Snapchat: entre 600 millones y 900 millones de usuarios activos mensuales.</li>
+      <li>Telegram: cerca de 1,000 millones de usuarios activos mensuales.</li>
+      <li>Twitter (X): aproximadamente 500-600 millones de usuarios activos diarios.</li>
+    </ul>
+    <p>Las redes sociales tienen múltiples ventajas, como estar conectado con otros y compartir información, pero también presentan desventajas como impaciencia, alter ego digital o exposición constante.</p>
+    
+    <h3>Signos y síntomas de alarma</h3>
+    <img src="static/images/social_media_infographic.png" alt="Redes Sociales">
+    <p>Tristeza, frustración, comparación excesiva, ansiedad, insomnio, bajo rendimiento, desinterés por actividades offline y pérdida de control.</p>
+    <p>El flujo constante de 'me gusta', comentarios y contenidos compartidos ofrece sensación de aprobación instantánea y afecta la dopamina y serotonina, vinculando el uso excesivo con síntomas de depresión.</p>
+    <p>Fenómeno FOMO (Fear of Missing Out): ansiedad por perderse experiencias que otros disfrutan, baja autoestima y necesidad de validación digital.</p>
+
+    <h3>Algunas recomendaciones</h3>
+    <ul>
+      <img src="static/images/social2_m.png" alt="Recomendaciones Redes Sociales">
+      <li>Establecer límites y desconectarse periódicamente.</li>
+      <li>Realizar actividades offline: ejercicio, hobbies, interacción social, tiempo en familia.</li>
+      <li>Recordar que las publicaciones muestran solo una fracción idealizada de la vida.</li>
+    </ul>
+
+    <!-- Botón que lleva a prediccion.html -->
+    <a href="prediccion.html" class="btn-prediccion">Predicción de Emoción Dominante</a>
+  </div>
+</div>
+
+</body>
+</html>
