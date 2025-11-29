@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Predicción de Emociones</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f2f5;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .container {
+      max-width: 700px;
+      width: 100%;
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+
+    h2 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 25px;
+    }
+
+    form label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 12px;
+      margin-top: 5px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+
+    input:focus, select:focus {
+      border-color: #4CAF50;
+      outline: none;
+    }
+
+    button {
+      width: 100%;
+      padding: 15px;
+      margin-top: 20px;
+      background-color: #4CAF50;
+      color: white;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    #result {
+      margin-top: 25px;
+      text-align: center;
+    }
+
+    .prediction-card {
+      background-color: #e0f7fa;
+      border-radius: 10px;
+      padding: 20px;
+      font-size: 22px;
+      font-weight: bold;
+      color: #00796b;
+      margin-bottom: 20px;
+    }
+
+    .probability-bar {
+      margin: 10px 0;
+      background-color: #ddd;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .probability-fill {
+      height: 25px;
+      color: white;
+      line-height: 25px;
+      text-align: right;
+      padding-right: 10px;
+      border-radius: 10px;
+    }
+
+    .Ira { background-color: #e53935; }
+    .Ansiedad { background-color: #fb8c00; }
+    .Aburrimiento { background-color: #757575; }
+    .Felicidad { background-color: #fdd835; color: #333; }
+    .Neutral { background-color: #90a4ae; }
+    .Tristeza { background-color: #1e88e5; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>Predicción de Emoción Dominante</h2>
+
+  <form id="predictForm">
+    <label>Edad:</label>
+    <input type="number" id="Age" min="0" required>
+
+    <label>Tiempo diario de uso (minutos):</label>
+    <input type="number" id="Daily_Usage" min="0" required>
+
+    <label>Publicaciones por día:</label>
+    <input type="number" id="Posts_Per_Day" min="0" required>
+
+    <label>Likes recibidos por día:</label>
+    <input type="number" id="Likes_Received" min="0" required>
+
+    <label>Comentarios recibidos por día:</label>
+    <input type="number" id="Comments_Received" min="0" required>
+
+    <label>Mensajes enviados por día:</label>
+    <input type="number" id="Messages_Sent" min="0" required>
+
+    <label>Género:</label>
+    <select id="Gender" required>
+      <option value="">Seleccione...</option>
+      <option value="0">Femenino</option>
+      <option value="1">Masculino</option>
+      <option value="2">No-binario</option>
+    </select>
+
+    <label>Plataforma:</label>
+    <select id="Platform" required>
+      <option value="">Seleccione...</option>
+      <option value="0">Facebook</option>
+      <option value="1">Instagram</option>
+      <option value="2">LinkedIn</option>
+      <option value="3">Snapchat</option>
+      <option value="4">Telegram</option>
+      <option value="5">Twitter</option>
+      <option value="6">Whatsapp</option>
+    </select>
+
+    <button type="submit">Predecir</button>
+  </form>
+
+  <div id="result"></div>
+</div>
+
+<script>
+document.getElementById("predictForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const fields = ["Age","Daily_Usage","Posts_Per_Day","Likes_Received","Comments_Received","Messages_Sent","Gender","Platform"];
+  for (const field of fields) {
+    const value = document.getElementById(field).value;
+    if (value === "" || value === null) {
+      alert("Por favor complete todos los campos correctamente.");
+      return;
+    }
+  }
+
+  const payload = {
+    Age: parseFloat(document.getElementById("Age").value),
+    Daily_Usage: parseFloat(document.getElementById("Daily_Usage").value),
+    Posts_Per_Day: parseInt(document.getElementById("Posts_Per_Day").value),
+    Likes_Received: parseInt(document.getElementById("Likes_Received").value),
+    Comments_Received: parseInt(document.getElementById("Comments_Received").value),
+    Messages_Sent: parseInt(document.getElementById("Messages_Sent").value),
+    Gender: parseInt(document.getElementById("Gender").value),
+    Platform: parseInt(document.getElementById("Platform").value)
+  };
+
+  try {
+    const response = await fetch("https://emociones-backend.onrender.com", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(payload)
+    });
+
+    if (!response.ok) throw new Error("Error en la predicción");
+
+    const result = await response.json();
+
+    // Mostrar predicción principal
+    const container = document.getElementById("result");
+    container.innerHTML = `<div class="prediction-card">${result.prediction}</div>`;
+
+    // Mostrar probabilidades
+    if(result.probabilities){
+      for(const [emotion, prob] of Object.entries(result.probabilities)){
+        const percent = (prob*100).toFixed(2);
+        container.innerHTML += `
+          <div>${emotion}</div>
+          <div class="probability-bar">
+            <div class="probability-fill ${emotion}" style="width:${percent}%">${percent}%</div>
+          </div>
+        `;
+      }
+    }
+
+  } catch (error) {
+    document.getElementById("result").innerHTML = "Error: " + error.message;
+  }
+});
+</script>
+
+</body>
+</html>
