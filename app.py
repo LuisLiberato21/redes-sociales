@@ -37,6 +37,11 @@ app.mount("/static", StaticFiles(directory="frontend/static"), name="static")
 def root():
     return FileResponse(os.path.join("frontend", "index.html"))
 
+@app.get("/prediccion.html")
+def prediccion():
+    return FileResponse(os.path.join("frontend", "prediccion.html"))
+
+
 @app.post("/predict")
 def predict(data: dict):
     # Convertir a array en el mismo orden que tu modelo usa
@@ -52,5 +57,6 @@ def predict(data: dict):
 
     # Devolver emoción en español y probabilidades
     return {"prediction": emotion_map[int(pred)], "probabilities": probabilities}
+
 
 
