@@ -31,7 +31,7 @@ emotion_map = {
 }
 
 # Servir frontend
-app.mount("/static", StaticFiles(directory="frontend"), name="static")
+app.mount("/static", StaticFiles(directory="frontend/static"), name="static")
 
 @app.get("/")
 def root():
@@ -52,4 +52,5 @@ def predict(data: dict):
 
     # Devolver emoción en español y probabilidades
     return {"prediction": emotion_map[int(pred)], "probabilities": probabilities}
+
 
