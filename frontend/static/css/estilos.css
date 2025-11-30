@@ -121,6 +121,21 @@ button:hover, .btn-prediccion:hover {
   border-radius: 10px;
 }
 
+/* Contenedor de botones lado a lado */
+.btn-group {
+  display: flex;
+  justify-content: center;
+  gap: 15px;     /* separación entre botones */
+  margin-top: 20px;
+}
+
+/* Botones más compactos para que quepan bien */
+.small-btn {
+  width: 40%;
+  padding: 12px;
+  margin: 0;
+}
+
 /* ----------------- COLORES POR EMOCIÓN ----------------- */
 .Ira { background-color: #e53935; }
 .Ansiedad { background-color: #fb8c00; }
@@ -128,3 +143,4 @@ button:hover, .btn-prediccion:hover {
 .Felicidad { background-color: #fdd835; color: #333; }
 .Neutral { background-color: #90a4ae; }
 .Tristeza { background-color: #1e88e5; }
+
