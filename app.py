@@ -3,15 +3,16 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 import joblib
+import pandas as pd
 import numpy as np
 import os
 
 app = FastAPI()
 
-# Habilitar CORS (para permitir fetch desde el frontend)
+# Habilitar CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Para producción, reemplaza "*" con tu dominio
+    allow_origins=["*"],  # En producción, reemplazar "*" por dominio real
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -20,7 +21,7 @@ app.add_middleware(
 # Cargar modelo
 model = joblib.load("modelo_emociones.pkl")
 
-# Diccionario de emociones en español según tu encoding
+# Mapeo emociones
 emotion_map = {
     0: "Ira",
     1: "Ansiedad",
@@ -29,6 +30,18 @@ emotion_map = {
     4: "Neutral",
     5: "Tristeza"
 }
+
+# Orden correcto de columnas del modelo
+FEATURE_COLUMNS = [
+    "Age",
+    "Gender",
+    "Platform",
+    "Daily_Usage_Time (minutes)",
+    "Posts_Per_Day",
+    "Likes_Received_Per_Day",
+    "Comments_Received_Per_Day",
+    "Messages_Sent_Per_Day"
+]
 
 # Servir frontend
 app.mount("/static", StaticFiles(directory="frontend/static"), name="static")
@@ -44,19 +57,23 @@ def prediccion():
 
 @app.post("/predict")
 def predict(data: dict):
-    # Convertir a array en el mismo orden que tu modelo usa
-    valores = np.array([list(data.values())])
-    pred = model.predict(valores)[0]
 
-    # Obtener probabilidades si el modelo soporta predict_proba
+    # Crear DataFrame con orden EXACTO de columnas
+    df = pd.DataFrame([[data[col] for col in FEATURE_COLUMNS]], columns=FEATURE_COLUMNS)
+
+    # Predicción
+    pred = model.predict(df)[0]
+
+    # Probabilidades (si el modelo las soporta)
     if hasattr(model, "predict_proba"):
-        probs = model.predict_proba(valores)[0]
-        probabilities = {emotion_map[i]: float(probs[i]) for i in range(len(probs))}
+        probs = model.predict_proba(df)[0]
+        probabilities = {
+            emotion_map[i]: float(probs[i]) for i in range(len(probs))
+        }
     else:
         probabilities = None
 
-    # Devolver emoción en español y probabilidades
-    return {"prediction": emotion_map[int(pred)], "probabilities": probabilities}
-
-
-
+    return {
+        "prediction": emotion_map[int(pred)],
+        "probabilities": probabilities
+    }
